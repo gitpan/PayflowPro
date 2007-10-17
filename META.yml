@@ -1,0 +1,11 @@
+# http://module-build.sourceforge.net/META-spec.html
+#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
+name:         PayflowPro
+version:      1150
+version_from: PayflowPro.pm
+installdirs:  site
+requires:
+    LWP:                           0
+
+distribution_type: module
+generated_by: ExtUtils::MakeMaker version 6.30
