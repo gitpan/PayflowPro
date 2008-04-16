@@ -1,7 +1,7 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         PayflowPro
-version:      1150
+version:      1482
 version_from: PayflowPro.pm
 installdirs:  site
 requires:

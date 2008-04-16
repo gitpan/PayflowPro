@@ -1,5 +1,5 @@
-#! /opt/local/bin/perl
-# $Id: PayflowPro.pm 1150 2007-08-03 21:16:19Z khera $
+#! /usr/local/bin/perl
+# $Id: PayflowPro.pm 1482 2008-04-16 18:22:59Z khera $
 #
 # Copyright 2007 MailerMailer, LLC
 #
@@ -81,7 +81,7 @@ use constant TIMEOUT => 30;	# HTTP request timeout in seconds
 use constant NUMRETRIES => 3;	# number of times to retry HTTP timeout/err
 use vars qw($VERSION);
 
-$VERSION = sprintf "%d", q$Revision: 1150 $ =~ /(\d+)/;
+$VERSION = sprintf "%d", q$Revision: 1482 $ =~ /(\d+)/;
 my $agent = "MailerMailer PFPro";
 
 my ($pfprohost,$debug);
@@ -106,8 +106,8 @@ sub pftestmode {
   my $testmode = shift;
 
   $pfprohost = $testmode ?
-    'pilot-payflowpro.verisign.com' :
-    'payflowpro.verisign.com';
+    'pilot-payflowpro.paypal.com' :
+    'payflowpro.paypal.com';
 
   return 1;
 }
@@ -182,11 +182,10 @@ sub pfpro {
 
   my $request_id=substr(time . $data->{TRXTYPE} . $data->{INVNUM},0,32);
 
-  my $r = HTTP::Request->new(POST => "https://$pfprohost/transaction");
+  my $r = HTTP::Request->new(POST => "https://$pfprohost/");
   $r->content_type('text/namevalue');
   $r->header('X-VPS-REQUEST-ID' => $request_id,
 	     'X-VPS-CLIENT-TIMEOUT' => TIMEOUT, # timeout in seconds
-	     'X-VPS-VIT-CLIENT-CERTIFICATION-ID' => 'WallaceLikesCheese42',
 	     'X-VPS-VIT-INTEGRATION-PRODUCT' => $agent,
 	     'X-VPS-VIT-INTEGRATION-VERSION' => $VERSION,
 	     'X-VPS-VIT-OS-NAME' => $Config::Config{osname},
