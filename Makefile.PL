@@ -7,8 +7,6 @@ WriteMakefile(
     },
     dist => {
 	PREOP => 'pod2text PayflowPro.pm > README; perl mkcabundle > ca-bundle.crt',
-	SUFFIX => '.bz2',
-	COMPRESS => 'bzip2',
     },
     VERSION_FROM => 'PayflowPro.pm',
     );
