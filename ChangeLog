@@ -1,0 +1,5 @@
+2009-06-22  Vivek Khera  <vivek@khera.org>
+
+	* PayflowPro.pm: fixed typo in error message from failure to
+	connect to server.
+

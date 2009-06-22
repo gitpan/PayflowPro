@@ -3,6 +3,7 @@ ca-bundle.crt
 Makefile.PL
 PayflowPro.pm
 README
+ChangeLog
 mkcabundle
 test.pl
 META.yml                                 Module meta-data (added by MakeMaker)

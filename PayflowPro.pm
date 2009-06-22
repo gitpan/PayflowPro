@@ -1,5 +1,5 @@
 #! /usr/local/bin/perl
-# $Id: PayflowPro.pm 1482 2008-04-16 18:22:59Z khera $
+# $Id: PayflowPro.pm 2095 2009-06-22 16:16:13Z khera $
 #
 # Copyright 2007 MailerMailer, LLC
 #
@@ -81,7 +81,7 @@ use constant TIMEOUT => 30;	# HTTP request timeout in seconds
 use constant NUMRETRIES => 3;	# number of times to retry HTTP timeout/err
 use vars qw($VERSION);
 
-$VERSION = sprintf "%d", q$Revision: 1482 $ =~ /(\d+)/;
+$VERSION = sprintf "%d", q$Revision: 2095 $ =~ /(\d+)/;
 my $agent = "MailerMailer PFPro";
 
 my ($pfprohost,$debug);
@@ -238,7 +238,7 @@ sub pfpro {
     # to work.  this should just cause a retry on the application.
     warn "HTTP communication error: ".$response->status_line()."\n" if $debug;
     $retval->{RESULT} = -1;
-    $retval->{RESPMESG} = 'Failed to connect to host';
+    $retval->{RESPMSG} = 'Failed to connect to host';
   }
 
   $retval->{'X-VPS-REQUEST-ID'} = $request_id;	# useful for debugging
