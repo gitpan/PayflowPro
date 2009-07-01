@@ -1,3 +1,9 @@
+2009-07-01  Vick Khera  <vivek@khera.org>
+
+	* PayflowPro.pm: when generating the unique request ID for the
+	API, avoid undef warnings when INVNUM is not set (as it is not
+	required for referenced credits.)  Fix from bhk@bhent.com.
+
 2009-06-22  Vivek Khera  <vivek@khera.org>
 
 	* PayflowPro.pm: fixed typo in error message from failure to

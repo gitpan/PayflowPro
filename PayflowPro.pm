@@ -1,5 +1,5 @@
 #! /usr/local/bin/perl
-# $Id: PayflowPro.pm 2095 2009-06-22 16:16:13Z khera $
+# $Id: PayflowPro.pm 2111 2009-07-01 21:29:05Z khera $
 #
 # Copyright 2007 MailerMailer, LLC
 #
@@ -81,7 +81,7 @@ use constant TIMEOUT => 30;	# HTTP request timeout in seconds
 use constant NUMRETRIES => 3;	# number of times to retry HTTP timeout/err
 use vars qw($VERSION);
 
-$VERSION = sprintf "%d", q$Revision: 2095 $ =~ /(\d+)/;
+$VERSION = sprintf "%d", q$Revision: 2111 $ =~ /(\d+)/;
 my $agent = "MailerMailer PFPro";
 
 my ($pfprohost,$debug);
@@ -180,7 +180,10 @@ but you'll only see that if you turn on debugging.
 sub pfpro {
   my $data = shift;
 
-  my $request_id=substr(time . $data->{TRXTYPE} . $data->{INVNUM},0,32);
+  # for the case of a referenced credit, the INVNUM is not required to be set
+  # so use the ORIGID instead.  If that's not set, just use a fixed string
+  # to avoid undef warnings.
+  my $request_id=substr(time . $data->{TRXTYPE} . ($data->{INVNUM} || $data->{ORIGID} || 'NOID'),0,32);
 
   my $r = HTTP::Request->new(POST => "https://$pfprohost/");
   $r->content_type('text/namevalue');
