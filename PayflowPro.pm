@@ -1,5 +1,4 @@
-#! /usr/local/bin/perl
-# $Id: PayflowPro.pm 2111 2009-07-01 21:29:05Z khera $
+# $Id: PayflowPro.pm 3101 2011-04-04 19:12:45Z khera $
 #
 # Copyright 2007 MailerMailer, LLC
 #
@@ -77,19 +76,19 @@ use LWP::UserAgent;
 use HTTP::Request;
 use Config;
 
-use constant TIMEOUT => 30;	# HTTP request timeout in seconds
 use constant NUMRETRIES => 3;	# number of times to retry HTTP timeout/err
 use vars qw($VERSION);
 
-$VERSION = sprintf "%d", q$Revision: 2111 $ =~ /(\d+)/;
+$VERSION = sprintf "%d", q$Revision: 3101 $ =~ /(\d+)/;
 my $agent = "MailerMailer PFPro";
 
 my ($pfprohost,$debug);
 pftestmode(0);			# set "live" mode as default.
 
+our $timeout = 30;
+
 my $ua = new LWP::UserAgent;
 $ua->agent("$agent/$VERSION");
-$ua->timeout(TIMEOUT + 1);	# one more than timeout in VPS header below
 
 =pod
 
@@ -140,6 +139,12 @@ HTTP request, then convert the response back into a hash and return
 the reference to it.  This emulates the pfpro() function in the
 original API.
 
+Additionally, we honor a C<TIMEOUT> value which specifies the number
+of seconds to wait for a response from the server. The default is 30
+seconds.  Normally for production you should not need to alter this
+value.  The test servers are slower so may need larger timeout. The
+minimum value that PayPal will accept is 5 seconds.
+
 It uses the time and the C<INVNUM> (Invoice Number) field of input to
 generate the unique request ID, so don't try to process the same
 INVNUM more than once per second.  C<INVNUM> is a required datum to be
@@ -185,10 +190,16 @@ sub pfpro {
   # to avoid undef warnings.
   my $request_id=substr(time . $data->{TRXTYPE} . ($data->{INVNUM} || $data->{ORIGID} || 'NOID'),0,32);
 
+  if (defined $data->{TIMEOUT}) {
+    $timeout = $data->{TIMEOUT};
+  }
+
+  $ua->timeout($timeout + 1); # one more than timeout in VPS header below
+
   my $r = HTTP::Request->new(POST => "https://$pfprohost/");
   $r->content_type('text/namevalue');
   $r->header('X-VPS-REQUEST-ID' => $request_id,
-	     'X-VPS-CLIENT-TIMEOUT' => TIMEOUT, # timeout in seconds
+	     'X-VPS-CLIENT-TIMEOUT' => $timeout, # timeout in seconds
 	     'X-VPS-VIT-INTEGRATION-PRODUCT' => $agent,
 	     'X-VPS-VIT-INTEGRATION-VERSION' => $VERSION,
 	     'X-VPS-VIT-OS-NAME' => $Config::Config{osname},
@@ -248,3 +259,19 @@ sub pfpro {
 
   return $retval;
 }
+
+1;
+
+
+=pod
+
+=head1 AUTHOR
+
+Vivek Khera <C<vivek@khera.org>>
+
+=head1 LICENSE
+
+This module is Copyright 2007-2009 Khera Communications, Inc.  It is
+licensed under the same terms as Perl itself.
+
+=cut

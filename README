@@ -69,6 +69,12 @@ DESCRIPTION
     then convert the response back into a hash and return the reference to
     it. This emulates the pfpro() function in the original API.
 
+    Additionally, we honor a "TIMEOUT" value which specifies the number of
+    seconds to wait for a response from the server. The default is 30
+    seconds. Normally for production you should not need to alter this
+    value. The test servers are slower so may need larger timeout. The
+    minimum value that PayPal will accept is 5 seconds.
+
     It uses the time and the "INVNUM" (Invoice Number) field of input to
     generate the unique request ID, so don't try to process the same INVNUM
     more than once per second. "INVNUM" is a required datum to be passed
@@ -103,4 +109,11 @@ DESCRIPTION
      Client-SSL-Warning: Peer certificate not verified
 
     but you'll only see that if you turn on debugging.
+
+AUTHOR
+    Vivek Khera <"vivek@khera.org">
+
+LICENSE
+    This module is Copyright 2007-2009 Khera Communications, Inc. It is
+    licensed under the same terms as Perl itself.
 
